@@ -1,0 +1,11 @@
+{
+  "name": "harness",
+  "description": "Scaffold and maintain a project-agnostic Claude Code harness.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Le2Seungyoon",
+    "url": "https://github.com/Le2Seungyoon"
+  },
+  "license": "MIT",
+  "keywords": ["harness", "claude-md", "scaffold", "rules", "hooks"]
+}
