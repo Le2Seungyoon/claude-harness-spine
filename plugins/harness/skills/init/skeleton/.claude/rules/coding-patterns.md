@@ -20,6 +20,13 @@ invent — read a sibling file. Canonical analogs:
 Prefer a proven library over a hand-rolled implementation. Don't borrow a library's metric/API name
 for a different custom implementation.
 
+**1:1 correspondence is the design default** — artifacts describing the same thing map 1:1 in name
+and unit, so the counterpart's location is derivable without search (visibility + maintainability):
+config entry — implementing module · pipeline node — component file · test dir — source package.
+<!-- FILL: list this project's actual 1:1 pairs as they are established. -->
+Adding one side of a pair without the other is a smell — wire both in the same change, and add a
+correspondence test when the mapping is enumerable.
+
 ## Style & configuration
 
 - **Secrets** → environment variables (e.g. `.env` + `os.getenv()` or the language's equivalent).

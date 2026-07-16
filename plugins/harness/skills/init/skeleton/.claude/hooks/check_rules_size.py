@@ -44,11 +44,18 @@ def main() -> None:
     name = os.path.basename(norm)
     msg = (
         f"[rules-size] {name} is now {n_lines} lines (soft budget {BUDGET}). "
-        "Apply workflow.md -> 'File size budget' (two-part): (1) SPLIT is your judgment "
-        "-- if a distinct sub-topic can be gated by a paths: glob, move it to its own "
-        "rules file first (may drop this file under budget). (2) For compress/dedupe/"
-        "currency, AskUserQuestion then invoke the claude-md-management:claude-md-improver "
-        "skill on this file. Advisory: a tight single-topic file slightly over is fine."
+        "REVIEW THE WHOLE FILE -- never just shave the line you added. Then apply "
+        "workflow.md -> 'File size budget' (four options, in this order): "
+        "(1) RELOCATE -- a section owned by another rules file's topic moves there "
+        "(leave a one-line pointer). (2) SPLIT -- a distinct sub-topic gateable by its "
+        "own paths: glob moves to a new path-scoped rules file (e.g. a subsystem's "
+        "deep-rules file). (3) ABSTRACT -- if several concrete entries are instances of "
+        "one generative principle, state the principle and delete the examples it "
+        "regenerates (e.g. 'nearest existing analog', '1:1 correspondence'); keep only "
+        "examples carrying a non-derivable why. (4) COMPRESS -- dedupe/tightening only: "
+        "AskUserQuestion, then invoke claude-md-management:claude-md-improver on this "
+        "file. (1)-(3) are your judgment; (4) is delegated. Advisory: a tight "
+        "single-topic file slightly over is fine."
     )
     print(
         json.dumps(

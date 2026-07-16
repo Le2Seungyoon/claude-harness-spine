@@ -61,18 +61,26 @@ Format:
 Gotchas accumulate; a bloated rules file loads in full every session and dilutes signal. Soft
 budget: **~150 lines per file** (CLAUDE.md and each `.claude/rules/*.md`). A PostToolUse hook
 (`.claude/hooks/check_rules_size.py`, wired in `settings.json`) nudges when an edit crosses it.
-Detection is deterministic; the response is a **two-part judgment with a clear division of labor**:
+Detection is deterministic. When the nudge fires, **review the whole file — never just shave the
+line you added.** Then pick from **four options, in this order**:
 
-- **Split — you decide (the plugin can't).** Whether an over-budget file should be broken up is a
-  judgment `claude-md-improver` does not make. If the overflow is a distinct sub-topic a `paths:`
+- **① Relocate — you decide.** If a section belongs to another existing rules file's topic, move it
+  to its owner file and leave a one-line pointer. Content ownership beats file convenience.
+  <!-- FILL: record precedents as they happen ("<section> moved <fileA> → <fileB>"). -->
+- **② Split — you decide (the plugin can't).** If the overflow is a distinct sub-topic a `paths:`
   glob can gate, move it into its own path-scoped rules file (front-matter `paths:`) and
-  cross-reference from the parent. Do this **first** — it may drop the file under budget on its
-  own. Don't split just to hit the number; a tight single-topic file slightly over is fine.
-- **Compress / dedupe / currency — delegate to the plugin.** For tightening prose, removing
-  redundancy, and stale-content trimming, mirror the Superpowers pattern: `AskUserQuestion` whether
-  to clean up, then invoke the `claude-md-management:claude-md-improver` skill via `Skill`, naming
-  the over-budget file (its default discovery only scans `CLAUDE.md`, so point it at the
-  `.claude/rules/*.md` file). It audits conciseness/duplication/currency and proposes targeted edits.
+  cross-reference from the parent. Don't split just to hit the number; a tight single-topic file
+  slightly over is fine.
+- **③ Abstract — you decide (highest leverage).** If several concrete entries are instances of one
+  generative principle, state the principle and delete the examples it now regenerates — losing
+  specifics is acceptable when the principle reliably reproduces them (e.g. "find the nearest
+  existing analog", "1:1 correspondence"). Keep an example only if it carries a non-derivable why
+  (a gotcha).
+- **④ Compress / dedupe / currency — delegate to the plugin.** For tightening prose, removing
+  redundancy, and stale-content trimming: `AskUserQuestion` whether to clean up, then invoke the
+  `claude-md-management:claude-md-improver` skill via `Skill`, naming the over-budget file (its
+  default discovery only scans `CLAUDE.md`, so point it at the `.claude/rules/*.md` file).
+  Note the plugin only compresses wording — ①②③ are judgment calls it does not make.
 
 ## Rule Conflicts & Harness Improvement
 

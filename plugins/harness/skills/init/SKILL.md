@@ -53,6 +53,10 @@ The files to copy live in `skeleton/` next to this SKILL.md — this skill's bas
 - **Permissions**: populate `settings.json` `permissions.allow`/`deny` for the detected package
   manager (e.g. uv → allow `Bash(uv sync:*)`, `Bash(uv run:*)`; deny `Bash(uv pip install:*)`,
   `Write(uv.lock)`, `Edit(uv.lock)`). Leave empty if unsure rather than guessing.
+- **enabledPlugins**: declare team-mandatory plugins in `settings.json` `enabledPlugins` ONLY from
+  official/default-known marketplaces (teammates get an auto-install prompt on open). Never put
+  personal-marketplace plugins — including this harness plugin itself — into project settings:
+  teammates without that marketplace only get "unknown marketplace" warnings.
 
 ### 5. Verify
 - `python3 -c "import json; json.load(open('.claude/settings.json'))"` — valid JSON.
