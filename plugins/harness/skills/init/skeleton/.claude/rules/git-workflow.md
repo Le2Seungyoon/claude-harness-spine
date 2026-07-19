@@ -3,6 +3,7 @@
 > Remote: `{{GIT_REMOTE_URL}}` — host `{{GIT_HOST}}` (default branch `{{DEFAULT_BRANCH}}`).
 > `.gitignore` is in place.
 <!-- FILL: confirm remote host + auth model — the PR gate below depends on the host. -->
+<!-- FILL: if README has a human-facing contribution section, add: "README §N mirrors this file — when changing either, sync the other." -->
 
 ## Branch-First Rule
 
