@@ -23,6 +23,15 @@
 IMPORTANT: Don't hardcode tunable values; put them in config.
 <!-- FILL: dependency-management rule (the one correct command) if the project has one. -->
 
+## Docs convention
+
+- **User-facing docs** — `docs/`, written in the team's language, filename `YYYY-MM-DD-<name>.md`
+  (the date prefix keeps the project timeline scannable).
+  <!-- FILL: set the language / location / naming for this team, or delete if N/A. -->
+- **Claude-facing instruction files** (this file, `.claude/**/*.md`) — written in **English**.
+  Domain string literals (menu labels, error constants, column names) stay in their original
+  language — they are data, not prose.
+
 ## Rules
 
 Read the relevant rule in `.claude/rules/` before writing code:
@@ -44,6 +53,10 @@ this session and record it in the right rules file. See `workflow.md` → Captur
 
 If a rule conflicts with a request, or a rule is out of sync with reality, don't silently paper
 over it — surface it to the user (see `workflow.md` → Rule Conflicts & Harness Improvement).
+
+Enforcement hooks (`.claude/settings.json`): the PR-gate denies `git push` until
+`origin/{{DEFAULT_BRANCH}}` is merged; a PostToolUse hook nudges when an instruction file exceeds
+the ~150-line budget (see `workflow.md` → File size budget).
 
 ## References
 
