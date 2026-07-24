@@ -14,6 +14,13 @@
             "if": "Bash(git push:*)",
             "timeout": 30,
             "statusMessage": "Checking origin/main is merged before push..."
+          },
+          {
+            "type": "command",
+            "command": "input=$(cat); printf '%s' \"$input\" | grep -qi 'git commit' || exit 0; printf '%s' \"$input\" | grep -qiE 'co-authored-by|generated with' || exit 0; printf '%s' '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Commit messages must not include AI attribution trailers (Co-Authored-By / Generated with ...). Remove them and retry. — .claude/settings.json PreToolUse hook\"}}'",
+            "if": "Bash(git commit:*)",
+            "timeout": 10,
+            "statusMessage": "Checking commit message for AI attribution trailers..."
           }
         ]
       }
