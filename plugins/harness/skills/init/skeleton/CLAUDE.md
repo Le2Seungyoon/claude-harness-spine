@@ -3,6 +3,13 @@
 {{PROJECT_ONE_LINER}}
 <!-- FILL: 2-3 lines on what this project does and its domain. -->
 
+## Stack
+
+<!-- FILL (optional — delete this section if a version table doesn't earn its keep here):
+runtime/framework + major versions the project pins to, one line each. Note any cross-repo
+version sync this project must respect and the bar for adding a new dependency (e.g. "requires
+PR justification"). -->
+
 ## Commands
 
 ```bash
@@ -54,9 +61,11 @@ this session and record it in the right rules file. See `workflow.md` → Captur
 If a rule conflicts with a request, or a rule is out of sync with reality, don't silently paper
 over it — surface it to the user (see `workflow.md` → Rule Conflicts & Harness Improvement).
 
-Enforcement hooks (`.claude/settings.json`): the PR-gate denies `git push` until
-`origin/{{DEFAULT_BRANCH}}` is merged; a PostToolUse hook nudges when an instruction file exceeds
-the ~150-line budget (see `workflow.md` → File size budget).
+## Enforcement hooks
+
+`.claude/settings.json` wires: a PR-gate hook (blocks push/PR when `{{DEFAULT_BRANCH}}` isn't
+merged in), a commit-attribution deny hook, and a PostToolUse hook nudging on oversized
+instruction files. See `git-workflow.md` and `workflow.md` → File size budget for the rationale.
 
 ## References
 
