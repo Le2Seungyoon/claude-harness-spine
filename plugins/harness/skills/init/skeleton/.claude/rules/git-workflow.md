@@ -38,17 +38,33 @@ secrets", "never force-push `{{DEFAULT_BRANCH}}`". Context-dependent conventions
 - **No AI attribution** in commit messages — do NOT append `Co-Authored-By: …` or
   `🤖 Generated with …` trailers. This **overrides** the harness default. (Delete this line if the
   project wants attribution.)
+  **Enforced:** a PreToolUse hook in `settings.json` denies `git commit` when the command contains
+  a `Co-Authored-By` / `Generated with` trailer.
 - Default: **stage + diff only, the developer runs `git commit`**. Exception: in a solo session
   where the admin has explicitly authorized direct git, Claude may commit during that session.
+
+## Syncing main into a feature branch
+
+`git fetch origin {{DEFAULT_BRANCH}} && git merge origin/{{DEFAULT_BRANCH}}`. On conflict, check
+**which side deleted vs. modified** the file before resolving automatically:
+- Deleted on `{{DEFAULT_BRANCH}}`, modified on the branch → the modification usually wins; decide
+  intent, then `git add <path>` to keep it (or `git rm <path>` if the deletion should stand).
+- Deleted on the branch, modified on `{{DEFAULT_BRANCH}}` → same judgment, reversed.
+Don't resolve by reflex (`git checkout --ours/--theirs`) — a delete/modify conflict is almost
+always an intent decision, not a textual one.
+
+## Merge main before opening a PR (required)
+
+1. Sync `{{DEFAULT_BRANCH}}` into the feature branch (see "Syncing main" above) — resolve conflicts
+   locally, not at PR time.
+2. Run the verification suite (`{{TEST_COMMAND}}` — typecheck/lint/test/build as applicable) and
+   confirm it passes on the merged tree.
+3. Confirm a clean working tree (`git status`) before opening the PR.
 
 ## Pull Requests
 
 - **PR title/description: concise, no AI attribution**, no lengthy narrative — same reason as
   commits (scan the diff, not prose). A short summary + key changes + how it was verified is enough.
-
-Before opening a PR, **always incorporate the latest `{{DEFAULT_BRANCH}}`**: `git fetch origin
-{{DEFAULT_BRANCH}} && git merge origin/{{DEFAULT_BRANCH}}`. Resolve conflicts locally first, not at
-PR time.
 
 **PR-gate hook (host-dependent — `init` wires the matching variant into `settings.json`):**
 - **GitHub + `gh` CLI**: the PR is created from the CLI, so the gate blocks `gh pr create` when
