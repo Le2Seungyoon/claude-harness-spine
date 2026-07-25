@@ -38,6 +38,8 @@ The files to copy live in `skeleton/` next to this SKILL.md — this skill's bas
   `{{CONFIG_LOCATION}}`, `{{DEPS_FILES}}`.
 - Whether the **superpowers** plugin is installed (keep or delete that `workflow.md` section).
 - Confirm the detected package manager / test command.
+- Whether `CLAUDE.md` → Stack table is worth keeping (versions to pin, cross-repo sync notes,
+  dependency-add bar) — fill it or delete the section.
 
 ### 4. Copy + fill
 - Copy everything under `skeleton/` into the project root, preserving paths (`CLAUDE.md`,
@@ -61,7 +63,9 @@ The files to copy live in `skeleton/` next to this SKILL.md — this skill's bas
 ### 5. Verify
 - `python3 -c "import json; json.load(open('.claude/settings.json'))"` — valid JSON.
 - Pipe a sample over-budget input through `.claude/hooks/check_rules_size.py` and confirm it nudges;
-  pipe a `git push` sample through the PR-gate command and confirm allow/deny behaves.
+  pipe a `git push` sample through the PR-gate command and confirm allow/deny behaves; pipe a
+  `git commit -m "... Co-Authored-By: ..."` sample through the commit-attribution hook and confirm
+  it denies (and that a trailer-free commit passes).
 - Grep for leftover `{{...}}` — none should ship raw. Any value you couldn't fill → convert to a
   `<!-- FILL -->` marker instead of leaving a bare `{{VAR}}`.
 
