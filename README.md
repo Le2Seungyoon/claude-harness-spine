@@ -10,7 +10,8 @@ enforcement hooks — distributed as a Claude Code plugin and scaffolded into an
 - **Self-growing rules** — gotchas and conventions discovered mid-task get written into
   `.claude/rules/*` at the end of every task, instead of staying lost in chat.
 - **Auto file-size enforcement** — a hook nudges the moment a rules file crosses ~150 lines,
-  triggering a split or a cleanup pass before it turns into noise.
+  triggering a relocate / split / abstract / compress pass (in that priority order) before it
+  turns into noise.
 - **Self-correcting** — a rule that's gone stale or wrong gets fixed as part of the task that
   exposed it, not left to rot.
 - **Active edits, not append-only** — updates land in the matching section of the existing file,
@@ -39,11 +40,13 @@ enforcement hooks — distributed as a Claude Code plugin and scaffolded into an
 
 Running `/harness:init` in a project scaffolds:
 
-- `CLAUDE.md` — router skeleton (Commands / Configuration / Rules / References tables).
+- `CLAUDE.md` — router skeleton (optional Stack table / Commands / Configuration / Rules /
+  Enforcement hooks summary / References).
 - `.claude/rules/` — the meta-process spine (`workflow.md`, `git-workflow.md`) plus stubbed
   tech-stack rules (`coding-patterns.md`, `architecture.md`, `testing.md`) to fill per project.
-- `.claude/settings.json` — a **PR-gate** hook (blocks push/PR until the default branch is merged)
-  and a **file-size-budget** hook (nudges when an instruction file exceeds ~150 lines).
+- `.claude/settings.json` — a **PR-gate** hook (blocks push/PR until the default branch is merged),
+  a **commit-attribution** hook (denies `git commit` carrying AI-signature trailers), and a
+  **file-size-budget** hook (nudges when an instruction file exceeds ~150 lines).
 - `.claude/hooks/check_rules_size.py` — the file-size nudge (project-agnostic).
 
 ## Install
@@ -73,14 +76,14 @@ In any project:
             └── init/
                 ├── SKILL.md                  # the bootstrap skill (detect/interview/copy/fill/verify)
                 └── skeleton/                 # files copied into the target project
-                    ├── CLAUDE.md              # router skeleton (Commands/Configuration/Rules/References)
+                    ├── CLAUDE.md              # router skeleton (Stack/Commands/Configuration/Rules/Enforcement hooks/References)
                     └── .claude/
-                        ├── settings.json      # PR-gate + file-size-budget hooks
+                        ├── settings.json      # PR-gate + commit-attribution + file-size-budget hooks
                         ├── hooks/
                         │   └── check_rules_size.py   # the file-size nudge hook
                         └── rules/
-                            ├── workflow.md          # planning, capturing learnings, file-size budget
-                            ├── git-workflow.md      # branch-first, protected commands, PR conventions
+                            ├── workflow.md          # planning, bug fixing, capturing learnings, file-size budget
+                            ├── git-workflow.md      # branch-first, protected commands, syncing main, PR conventions
                             ├── coding-patterns.md   # stub: style/convention rules to fill per project
                             ├── architecture.md      # stub: layers/boundaries rules to fill per project
                             └── testing.md           # stub: test conventions to fill per project

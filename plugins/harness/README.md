@@ -18,10 +18,10 @@ markers left for you to complete.
 | Component | Description |
 |-----------|--------------|
 | `skills/init/SKILL.md` | The bootstrap skill: detect → interview → copy → fill → verify → report |
-| `skills/init/skeleton/CLAUDE.md` | Router skeleton (Commands / Configuration / Rules / References tables) |
+| `skills/init/skeleton/CLAUDE.md` | Router skeleton (optional Stack table / Commands / Configuration / Rules / Enforcement hooks summary / References) |
 | `skills/init/skeleton/.claude/rules/workflow.md`, `git-workflow.md` | Meta-process rules, kept generic |
 | `skills/init/skeleton/.claude/rules/coding-patterns.md`, `architecture.md`, `testing.md` | Tech-stack rules, shipped as stubs to fill per project |
-| `skills/init/skeleton/.claude/settings.json` | PR-gate + file-size-budget hooks |
+| `skills/init/skeleton/.claude/settings.json` | PR-gate + commit-attribution + file-size-budget hooks |
 | `skills/init/skeleton/.claude/hooks/check_rules_size.py` | The file-size nudge, project-agnostic |
 
 ## Re-running
