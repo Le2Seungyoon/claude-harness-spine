@@ -17,11 +17,21 @@ before done). If selected, actually invoke it with the `Skill` tool. Skip for tr
 1–2 lines / doc-only changes.
 <!-- FILL: remove this section if the superpowers plugin is not installed for this project. -->
 
+## Bug Fixing
+
+- Investigate → fix → verify. Reproduce first; point at logs/errors directly rather than
+  guessing from symptoms.
+- If a fix feels hacky, implement the proper solution instead. Skip this for simple, obvious
+  one-liners.
+
 ## Task Completion
 
 - Don't mark done without proving behavior.
 - Bugs: reproduce → fix → confirm it's gone.
 - After a structural change, compare behavior against the previous state (tests + a real run).
+- Type checks and test suites verify code correctness, not feature correctness. When the change
+  has a runtime surface (a UI, a CLI, an endpoint, a running service), exercise it directly — start
+  it and drive the actual path — before declaring done, not just its automated tests.
 
 ## Capturing Learnings
 
@@ -61,26 +71,27 @@ Format:
 Gotchas accumulate; a bloated rules file loads in full every session and dilutes signal. Soft
 budget: **~150 lines per file** (CLAUDE.md and each `.claude/rules/*.md`). A PostToolUse hook
 (`.claude/hooks/check_rules_size.py`, wired in `settings.json`) nudges when an edit crosses it.
-Detection is deterministic. When the nudge fires, **review the whole file — never just shave the
-line you added.** Then pick from **four options, in this order**:
+Detection is deterministic; the response is a **four-option judgment, in priority order** — review
+the whole file, never just shave the line you added:
 
-- **① Relocate — you decide.** If a section belongs to another existing rules file's topic, move it
-  to its owner file and leave a one-line pointer. Content ownership beats file convenience.
+- **① Relocate — you decide.** If a section is really another rules file's topic (e.g. an
+  architectural invariant sitting in `coding-patterns.md`), move it to the file that owns it and
+  leave a one-line pointer behind. Content ownership beats file convenience. Do this first.
   <!-- FILL: record precedents as they happen ("<section> moved <fileA> → <fileB>"). -->
 - **② Split — you decide (the plugin can't).** If the overflow is a distinct sub-topic a `paths:`
   glob can gate, move it into its own path-scoped rules file (front-matter `paths:`) and
-  cross-reference from the parent. Don't split just to hit the number; a tight single-topic file
-  slightly over is fine.
-- **③ Abstract — you decide (highest leverage).** If several concrete entries are instances of one
-  generative principle, state the principle and delete the examples it now regenerates — losing
-  specifics is acceptable when the principle reliably reproduces them (e.g. "find the nearest
-  existing analog", "1:1 correspondence"). Keep an example only if it carries a non-derivable why
-  (a gotcha).
+  cross-reference from the parent. Don't split just to hit the number.
+- **③ Abstract — you decide (highest leverage).** If several concrete items are instances of one
+  generative principle, state the principle and delete the examples it regenerates. Keep only
+  examples with a non-derivable why (a gotcha).
 - **④ Compress / dedupe / currency — delegate to the plugin.** For tightening prose, removing
-  redundancy, and stale-content trimming: `AskUserQuestion` whether to clean up, then invoke the
-  `claude-md-management:claude-md-improver` skill via `Skill`, naming the over-budget file (its
-  default discovery only scans `CLAUDE.md`, so point it at the `.claude/rules/*.md` file).
-  Note the plugin only compresses wording — ①②③ are judgment calls it does not make.
+  redundancy, and stale-content trimming, mirror the Superpowers pattern: `AskUserQuestion` whether
+  to clean up, then invoke the `claude-md-management:claude-md-improver` skill via `Skill`, naming
+  the over-budget file (its default discovery only scans `CLAUDE.md`, so point it at the
+  `.claude/rules/*.md` file). It audits conciseness/duplication/currency and proposes targeted edits.
+
+A tight single-topic file slightly over budget is fine — these are levers, not a mandate to hit
+the number.
 
 ## Rule Conflicts & Harness Improvement
 
