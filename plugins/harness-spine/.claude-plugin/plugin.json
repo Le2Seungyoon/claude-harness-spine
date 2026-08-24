@@ -1,0 +1,17 @@
+{
+  "name": "harness-spine",
+  "description": "Scaffold and maintain a project-agnostic Claude Code harness (CLAUDE.md + rules + enforcement hooks).",
+  "version": "0.2.0",
+  "author": {
+    "name": "Le2Seungyoon",
+    "url": "https://github.com/Le2Seungyoon"
+  },
+  "license": "MIT",
+  "keywords": [
+    "harness",
+    "claude-md",
+    "scaffold",
+    "rules",
+    "hooks"
+  ]
+}

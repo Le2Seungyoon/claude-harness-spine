@@ -5,18 +5,24 @@
     "name": "Le2Seungyoon",
     "url": "https://github.com/Le2Seungyoon"
   },
-  "description": "Reusable Claude Code harness: CLAUDE.md + rules + enforcement hooks, scaffolded by /harness:init.",
+  "description": "Reusable Claude Code harness: CLAUDE.md + rules + enforcement hooks, scaffolded by /harness-spine:init.",
   "plugins": [
     {
-      "name": "harness",
-      "description": "Scaffold a project-agnostic Claude Code harness (CLAUDE.md + rules + PR-gate/file-size hooks) into any repo.",
-      "version": "0.1.0",
+      "name": "harness-spine",
+      "description": "Scaffold a project-agnostic Claude Code harness (CLAUDE.md + rules + PR-gate/file-size hooks) into any repo, and keep it in sync as the spine evolves.",
+      "version": "0.2.0",
       "author": {
         "name": "Le2Seungyoon"
       },
-      "source": "./plugins/harness",
+      "source": "./plugins/harness-spine",
       "category": "developer-tools",
-      "keywords": ["harness", "claude-md", "scaffold", "rules", "hooks"]
+      "keywords": [
+        "harness",
+        "claude-md",
+        "scaffold",
+        "rules",
+        "hooks"
+      ]
     }
   ]
 }

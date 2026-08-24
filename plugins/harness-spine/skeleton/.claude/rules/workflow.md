@@ -32,20 +32,21 @@ before done). If selected, actually invoke it with the `Skill` tool. Skip for tr
 - Type checks and test suites verify code correctness, not feature correctness. When the change
   has a runtime surface (a UI, a CLI, an endpoint, a running service), exercise it directly — start
   it and drive the actual path — before declaring done, not just its automated tests.
+- **A quiet checker is not evidence.** A hook or linter can be silent because it passed, or because
+  it never ran, or because the last instance fell below its threshold. Confirm by searching the
+  source (`enforcement.md` → An empty result is not proof).
 
 ## Capturing Learnings
 
 At the end of every task, before declaring done: **did anything reusable/recurring emerge this
 session?** If so, don't leave it in chat — capture it.
 
-Route first — **team rule vs personal/environment vs deterministic enforcement**:
-- Applies to anyone touching this repo (convention · contract · gotcha) → a committed
-  `.claude/rules/` file.
-- Specific to this machine/session/environment (local path, personal taste, one-off setup) →
-  auto memory (not a shared rule).
-- Absolute and deterministically enforceable in every context → `settings.json` /
-  `permissions.deny` (not prose). Prose is for context-dependent advice (boundary:
-  `git-workflow.md` → Protected Commands).
+Route first — the layer decides whether the rule ever runs (`enforcement.md` → Four layers):
+- Anyone touching this repo (convention · contract · gotcha) → a committed `.claude/rules/` file.
+- This machine/session only (local path, personal taste, one-off setup) → auto memory.
+- Deterministic, and checkable on this session's edits → a **hook** (+ its test).
+- Must hold on every authoring path (IDE · teammate · another agent) → a **test/CI invariant**;
+  absolute in every context → `permissions.deny`. Contracts and gate promotion: `enforcement.md`.
 
 Qualifies for a rules file:
 - A new convention/pattern decided this time (naming, structure, defaults).
@@ -84,11 +85,9 @@ the whole file, never just shave the line you added:
 - **③ Abstract — you decide (highest leverage).** If several concrete items are instances of one
   generative principle, state the principle and delete the examples it regenerates. Keep only
   examples with a non-derivable why (a gotcha).
-- **④ Compress / dedupe / currency — delegate to the plugin.** For tightening prose, removing
-  redundancy, and stale-content trimming, mirror the Superpowers pattern: `AskUserQuestion` whether
-  to clean up, then invoke the `claude-md-management:claude-md-improver` skill via `Skill`, naming
-  the over-budget file (its default discovery only scans `CLAUDE.md`, so point it at the
-  `.claude/rules/*.md` file). It audits conciseness/duplication/currency and proposes targeted edits.
+- **④ Compress / dedupe / currency — delegate to the plugin.** `AskUserQuestion` whether to clean
+  up, then invoke `claude-md-management:claude-md-improver` via `Skill`, **naming the over-budget
+  file** (its discovery only scans `CLAUDE.md`). It audits conciseness / duplication / currency.
 
 A tight single-topic file slightly over budget is fine — these are levers, not a mandate to hit
 the number.
@@ -104,6 +103,12 @@ that keeps growing and getting corrected.
   instructions override rules, but present the rationale so the reason the rule exists isn't lost.
 - **Rule wrong or stale**: if during work a rule doesn't match reality (code · server · convention),
   fixing that rule is part of the task. Propose/apply the update immediately and tell the user.
+- **Screen every rule revision with one question**: *was the rule wrong to begin with, or did this
+  change just make it inconvenient?* Only the first justifies rewriting it. The second is the rule
+  doing its job, and editing it there is how a harness argues itself out of its own constraints.
+- **An unsupported claim is an assumption.** If a statement in the harness lives only in the
+  sentence that asserts it — no test, no generated artifact, no command that re-checks it — mark it
+  as an assumption or delete it. A self-growing harness accumulates its own folklore otherwise.
 - **Improving the harness itself**: if you spot a harness defect — a missing trigger, a dead rule
   (code/config already blocks it), a wrong path-gate, a bloated CLAUDE.md — refine the harness
   alongside Capturing Learnings.
