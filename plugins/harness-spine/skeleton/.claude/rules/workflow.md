@@ -36,6 +36,12 @@ before done). If selected, actually invoke it with the `Skill` tool. Skip for tr
   it never ran, or because the last instance fell below its threshold. Confirm by searching the
   source (`enforcement.md` → An empty result is not proof).
 
+## Self-review
+
+At the end of every task, before declaring done: work `self-review.md` — ① this project's
+gates, and ② the judgments no gate can make (escape hatches, allowlist lines, re-invented
+equivalents, both halves of a mirror). Write the answers where the task is reported.
+
 ## Capturing Learnings
 
 At the end of every task, before declaring done: **did anything reusable/recurring emerge this
@@ -88,6 +94,10 @@ the whole file, never just shave the line you added:
 - **④ Compress / dedupe / currency — delegate to the plugin.** `AskUserQuestion` whether to clean
   up, then invoke `claude-md-management:claude-md-improver` via `Skill`, **naming the over-budget
   file** (its discovery only scans `CLAUDE.md`). It audits conciseness / duplication / currency.
+
+**A generated file takes none of the four.** Hand-edits and compression skills are both discarded
+by the next regeneration; the only lever is the generator — narrow its scope, or cap the entries
+and have it state how many were truncated (`enforcement.md` → Keeping a generated artifact alive).
 
 A tight single-topic file slightly over budget is fine — these are levers, not a mandate to hit
 the number.

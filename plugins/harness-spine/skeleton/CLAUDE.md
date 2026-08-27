@@ -35,6 +35,10 @@ IMPORTANT: Don't hardcode tunable values; put them in config.
 - **User-facing docs** — `docs/`, written in the team's language, filename `YYYY-MM-DD-<name>.md`
   (the date prefix keeps the project timeline scannable).
   <!-- FILL: set the language / location / naming for this team, or delete if N/A. -->
+- **The date prefix encodes how the file is maintained.** Dated = a snapshot of one moment, never
+  rewritten. **Undated = a living document, overwritten in place** — and inside one, the three
+  parts age differently: current state is *overwritten*, traps and prerequisites *accumulate*, and
+  decisions belong in whatever ledger records decisions, not here.
 - **Claude-facing instruction files** (this file, `.claude/**/*.md`) — written in **English**.
   Domain string literals (menu labels, error constants, column names) stay in their original
   language — they are data, not prose.
@@ -50,6 +54,7 @@ Read the relevant rule in `.claude/rules/` before writing code:
 | `coding-patterns.md` | when touching source (`{{SOURCE_GLOB}}`) |
 | `architecture.md` | when working on new modules / layer boundaries |
 | `testing.md` | when writing/editing tests |
+| `self-review.md` | at the end of every task, before declaring done or pushing |
 | `enforcement.md` | before adding a rule, a hook, or a deny — it decides which layer it goes in |
 <!-- FILL: add rows for topic/tool rules files you create (e.g. a service integration). Mark any
 generated file as `<name> (generated — regenerate with <cmd>)`; never hand-edit one. -->
@@ -71,6 +76,8 @@ over it — surface it to the user (see `workflow.md` → Rule Conflicts & Harne
 `.claude/settings.json` wires: a PR-gate hook (blocks push/PR when `{{DEFAULT_BRANCH}}` isn't
 merged in), a commit-attribution deny hook, and a PostToolUse hook nudging on oversized
 instruction files. See `git-workflow.md` and `workflow.md` → File size budget for the rationale.
+Generators and repo-wide scanners live in `.claude/scripts/`, not `.claude/hooks/` — both ship
+with their tests (`enforcement.md` → Where harness code lives).
 
 **Hooks only see this session's edits** — code written in an IDE, by a teammate, or by another
 agent passes none of them, and a silent hook is not proof a check ran. Rules that must hold on

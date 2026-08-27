@@ -42,7 +42,7 @@ enforcement hooks — distributed as a Claude Code plugin and scaffolded into an
 
 | Name | Description | Contents |
 |------|-------------|----------|
-| [harness-spine](plugins/harness-spine/) | Scaffold a project-agnostic Claude Code harness into any repo, and keep it in sync as the spine evolves | **Skills:** `init` — detect/interview/copy/fill/verify · `update` — classify/reconcile/verify against the current skeleton<br>**Skeleton:** `CLAUDE.md`, `.claude/rules/*` (incl. `enforcement.md`), `.claude/settings.json`, `.claude/hooks/` (hook + its test) |
+| [harness-spine](plugins/harness-spine/) | Scaffold a project-agnostic Claude Code harness into any repo, and keep it in sync as the spine evolves | **Skills:** `init` — detect/interview/copy/fill/verify · `update` — classify/reconcile/verify against the current skeleton<br>**Skeleton:** `CLAUDE.md`, `.claude/rules/*` (incl. `enforcement.md`), `.claude/settings.json`, `.claude/hooks/` (hook + its test), `.claude/scripts/` (scanner + its test) |
 
 ## What you get
 
@@ -56,6 +56,8 @@ Running `/harness-spine:init` in a project scaffolds:
 - `.claude/settings.json` — a **PR-gate** hook (blocks push/PR until the default branch is merged),
   a **commit-attribution** hook (denies `git commit` carrying AI-signature trailers), and a
   **file-size-budget** hook (nudges when an instruction file exceeds ~150 lines).
+- `.claude/scripts/check_rule_links.py` — scans every rules pointer and fails on one that no
+  longer resolves; the layer a hook cannot reach. Shipped with its own test.
 - `.claude/hooks/check_rules_size.py` — the file-size nudge (project-agnostic), shipped with
   `test_check_rules_size.py` beside it: a hook is code, so it arrives with a test covering both the
   must-block and the must-pass half.
@@ -103,10 +105,14 @@ section**. Files the project has since written in its own words are never overwr
                 ├── hooks/
                 │   ├── check_rules_size.py   # the file-size nudge hook (contract template)
                 │   └── test_check_rules_size.py  # its test — must-block and must-pass halves
+                ├── scripts/
+                │   ├── check_rule_links.py   # scanner: rules pointers must resolve (test layer)
+                │   └── test_check_rule_links.py  # its test
                 └── rules/
                     ├── workflow.md           # planning, bug fixing, capturing learnings, file-size budget
                     ├── git-workflow.md       # branch-first, protected commands, syncing main, PR conventions
-                    ├── enforcement.md        # prose vs hook vs test vs deny; hook contracts; gate promotion
+                    ├── enforcement.md        # prose vs hook vs test vs deny; hook contracts; generated-artifact lifecycle
+                    ├── self-review.md        # end-of-task checklist: gates to run + judgments no gate can make
                     ├── coding-patterns.md    # stub: conventions, when to extract, derive-don't-restate
                     ├── architecture.md       # stub: layers/boundaries + shared homes to fill per project
                     └── testing.md            # stub: test conventions, invariant + freshness tests

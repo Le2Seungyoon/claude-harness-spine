@@ -26,6 +26,9 @@ here**, as a test over the tree itself — not only as a hook (`enforcement.md` 
   listed, so the message tells the reader what to fix.
 - Give every invariant test an escape hatch the source can carry (a marker comment with a reason),
   or the first legitimate exception gets the test deleted.
+- Shipped with the harness: `.claude/scripts/check_rule_links.py` pins that every file a rules
+  file points at still exists — the pointers `workflow.md` -> File size budget tells you to leave
+  behind. Wire it into this project's suite so a rename cannot silently orphan a rule.
   <!-- FILL: this project's invariant tests as they are added — what each pins, and its marker. -->
 
 ## Freshness tests for generated artifacts
@@ -33,6 +36,12 @@ here**, as a test over the tree itself — not only as a hook (`enforcement.md` 
 Anything committed but generated (an inventory, a schema dump, a rule index) goes stale silently:
 it rots through edits no hook observes. **Regenerate in the test and compare** — the test fails when
 the committed copy is out of date, and the failure message names the regeneration command.
+
+- **Prove it catches staleness by causing staleness**, three ways: delete one entry, delete a whole
+  section, and add a real occurrence without regenerating. A freshness test that has never been
+  seen red is a comment.
+- **Name the authoring paths it still does not cover**, in the test's docstring. Being honest about
+  the gap is what keeps someone from reading green as "nothing is stale anywhere".
 
 ## Verifying the defenses themselves
 

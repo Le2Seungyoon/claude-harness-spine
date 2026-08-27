@@ -50,7 +50,8 @@ content — copy from `skeleton/` and substitute.**
 ### 4. Copy + fill
 - Copy everything under `skeleton/` into the project root, preserving paths (`CLAUDE.md`,
   `.claude/rules/*.md` — including `enforcement.md` —, `.claude/settings.json`,
-  `.claude/hooks/check_rules_size.py` **and its `test_check_rules_size.py`**).
+  `.claude/hooks/check_rules_size.py` **and its `test_check_rules_size.py`**,
+  `.claude/scripts/check_rule_links.py` **and its `test_check_rule_links.py`**).
 - Substitute all `{{VARS}}` with detected/interviewed values across the copied files.
 - **PR-gate hook variant** (`settings.json` + the `git-workflow.md` prose):
   - The shipped default gates **`git push`** (works for any host). Keep it for Bitbucket / GitLab /
@@ -77,6 +78,11 @@ content — copy from `skeleton/` and substitute.**
 - `python3 -c "import json; json.load(open('.claude/settings.json'))"` — valid JSON.
 - `python3 .claude/hooks/test_check_rules_size.py` — all checks pass. It covers both halves
   (must-block *and* must-pass); a hook test with only the must-block half cannot catch false positives.
+- `python3 .claude/scripts/test_check_rule_links.py` — all checks pass. Then run
+  `python3 .claude/scripts/check_rule_links.py` on the filled tree: it must print
+  `RULE_LINKS_CLEAN`. Substitution can leave a pointer aimed at a file this project deleted.
+- Wire `check_rule_links.py` into the project's own test suite before finishing — as a shipped
+  script nothing calls, it is inert (`enforcement.md` -> Four layers).
 - Pipe a sample over-budget input through `.claude/hooks/check_rules_size.py` and confirm it nudges;
   pipe a `git push` sample through the PR-gate command and confirm allow/deny behaves; pipe a
   `git commit -m "... Co-Authored-By: ..."` sample through the commit-attribution hook and confirm
@@ -87,7 +93,8 @@ content — copy from `skeleton/` and substitute.**
 ### 6. Report
 - List every remaining `<!-- FILL: ... -->` marker (file + line) as a checklist for the human —
   especially the ② stub rules (`coding-patterns.md`, `architecture.md`, `testing.md`) whose deep
-  project rules only the human / a later session can write.
+  project rules only the human / a later session can write, and `self-review.md` ① — an unfilled
+  gates table leaves half that checklist inert.
 - Remind: add topic/tool rules files (a service integration, a framework) as the project grows;
   keep each under the ~150-line budget (the `check_rules_size.py` hook nudges when crossed).
 - **State plainly what was not installed: there is no counting layer.** The harness ships the
