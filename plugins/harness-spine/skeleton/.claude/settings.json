@@ -27,7 +27,7 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
@@ -40,6 +40,7 @@
     ]
   },
   "enabledPlugins": {
-    "claude-md-management@claude-plugins-official": true
+    "claude-md-management@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
   }
 }

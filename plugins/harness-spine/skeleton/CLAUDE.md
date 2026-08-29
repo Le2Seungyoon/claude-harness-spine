@@ -50,7 +50,12 @@ Read the relevant rule in `.claude/rules/` before writing code:
 | `coding-patterns.md` | when touching source (`{{SOURCE_GLOB}}`) |
 | `architecture.md` | when working on new modules / layer boundaries |
 | `testing.md` | when writing/editing tests |
-<!-- FILL: add rows for topic/tool rules files you create (e.g. a service integration). -->
+| `enforcement.md` | before adding a rule, a hook, or a deny — it decides which layer it goes in |
+<!-- FILL: add rows for topic/tool rules files you create (e.g. a service integration). Mark any
+generated file as `<name> (generated — regenerate with <cmd>)`; never hand-edit one. -->
+
+**Write FILL entries as pointers, not inventories.** A hand-copied list ("the components are A, B,
+C") is stale by the next commit — name the file or command that *is* the current answer instead.
 
 When reusable knowledge emerges (a new convention, checklist, design decision, contract, or
 recurring gotcha), record it in the matching `.claude/rules/` file — not in personal memory.
@@ -66,6 +71,10 @@ over it — surface it to the user (see `workflow.md` → Rule Conflicts & Harne
 `.claude/settings.json` wires: a PR-gate hook (blocks push/PR when `{{DEFAULT_BRANCH}}` isn't
 merged in), a commit-attribution deny hook, and a PostToolUse hook nudging on oversized
 instruction files. See `git-workflow.md` and `workflow.md` → File size budget for the rationale.
+
+**Hooks only see this session's edits** — code written in an IDE, by a teammate, or by another
+agent passes none of them, and a silent hook is not proof a check ran. Rules that must hold on
+every authoring path need a test instead; see `enforcement.md`.
 
 ## References
 
