@@ -6,12 +6,23 @@ paths:
 
 ## Before writing new code (the rule that generates the rest)
 
-**Find the nearest existing analog and copy its conventions** — file naming, layout, import order,
-config loading, return shape. Most rules below are just instances of this. When unsure, don't
-invent — read a sibling file. Canonical analogs:
+Two questions, and they are asked **together**:
 
-<!-- FILL: list 2-4 canonical files new code should mirror. Shape:
-- New <layer> module → the signature pattern of `<path/to/module>` (`<fn>(...)`).
+1. **"What does this resemble?"** — find the nearest existing analog and copy its conventions:
+   file naming, layout, import order, config loading, return shape.
+2. **"How many times has this been written by now?"** — if the answer is *two*, you are not
+   writing new code, you are producing a duplicate. Go to **When to extract**.
+
+Question 1 on its own reliably manufactures copies. What you mirror from a sibling file is its
+**conventions**, never its **implementation block**: copying the shape of a handler is following a
+convention, copying the handler's body is hardcoding it a second time. When unsure, don't invent —
+read a sibling file. Canonical analogs:
+
+<!-- FILL: list 2-4 canonical files new code should mirror. For each, name the evidence that makes
+it canonical and how to re-check it — an analog asserted without evidence is where duplication
+starts, and the assertion outlives the fact. Shape:
+- New <layer> module → `<path/to/module>` (`<fn>(...)`). Evidence: <N of M modules follow it, as of
+  <date>> — re-verify with `<command>` before relying on this line.
 - <External service> access code → `<path/to/client>`.
 - Reading config → `<config loader call>`.
 - Tests → `tests/<module>/test_*.py` (see `testing.md`).
@@ -23,19 +34,39 @@ for a different custom implementation.
 **1:1 correspondence is the design default** — artifacts describing the same thing map 1:1 in name
 and unit, so the counterpart's location is derivable without search (visibility + maintainability):
 config entry — implementing module · pipeline node — component file · test dir — source package.
-<!-- FILL: list this project's actual 1:1 pairs as they are established. -->
+<!-- FILL: point at the file that *is* the current list of pairs; don't transcribe the list here. -->
 Adding one side of a pair without the other is a smell — wire both in the same change, and add a
 correspondence test when the mapping is enumerable.
 
-## Style & configuration
+## When to extract
+
+- **The second occurrence is the obligation point**, not the third. The first copy is cheap and
+  invisible; the second is where "fix it in N places" begins.
+- **The obligation falls on the second arrival** — whoever writes the copy, not whoever wrote the
+  original. They are the first person in a position to see both call sites.
+- **Promotion path**: module-owned → shared home (`architecture.md` → Shared homes). **Read both
+  call sites before designing the API.** An interface shaped around only one of them won't fit the
+  other, and the second caller will fork it straight back into a copy.
+- **"It was never shared to begin with" is not a licence.** A structure with no canonical home is
+  precisely the case no canonical-diff gate can see — which makes placing it your job, not
+  something the absence of a rule excuses.
+- If extraction genuinely cannot happen in this change (scope, risk, a release in flight), **don't
+  copy silently**: copy and say so in the PR — what was duplicated, why, and what would make
+  extraction possible. A copy a reviewer can see is a decision; a silent one is a defect.
+
+## Derive, don't restate
+
+Hardcoding is not only about scalars.
 
 - **Secrets** → environment variables (e.g. `.env` + `os.getenv()` or the language's equivalent).
   Never hardcode or commit secrets.
 - **Tunable values** (thresholds · windows · hyperparameters · feature flags) → config, not code.
-  No hardcoding.
+- **Structure counts as hardcoding too.** Repeating a block of markup / query / handler / config
+  N times means fixing it in N places — which is the definition. The only difference from a magic
+  number is that nothing is counting the repeats for you.
+- Don't couple logic to specific value names/counts — behave off the config lists / thresholds.
 - Imports/ordering: stdlib → third-party → local, blank-line separated. Type hints on signatures.
   <!-- FILL: adjust to this project's language / style conventions. -->
-- Don't couple logic to specific value names/counts — behave off the config lists / thresholds.
 
 ## Gotchas (non-obvious — mirroring won't catch these)
 
@@ -45,5 +76,6 @@ correspondence test when the mapping is enumerable.
 - **<a subtle default that flips behavior>** — <the trap + the regression test that pins it>.
 -->
 
-> For tests, see `testing.md`. Add topic-scoped rules files (a service/tool rule) as the project
-> grows; keep each file under the ~150-line budget (see `workflow.md` → File size budget).
+> For tests, see `testing.md`; for how a rule here becomes a hook or a test, see `enforcement.md`.
+> Add topic-scoped rules files (a service/tool rule) as the project grows; keep each file under the
+> ~150-line budget (see `workflow.md` → File size budget).

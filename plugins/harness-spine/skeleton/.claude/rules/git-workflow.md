@@ -60,6 +60,22 @@ always an intent decision, not a textual one.
 2. Run the verification suite (`{{TEST_COMMAND}}` — typecheck/lint/test/build as applicable) and
    confirm it passes on the merged tree.
 3. Confirm a clean working tree (`git status`) before opening the PR.
+4. **Re-check against what arrived while you were away.** A long-lived branch was written against a
+   tree that didn't yet contain what the default branch has since shared. A clean textual merge does
+   not mean your code uses it. Ask what got promoted since you branched, and read shared homes from
+   `origin/{{DEFAULT_BRANCH}}` — never from your own working tree.
+
+## Parallel branches have no "second arrival"
+
+`coding-patterns.md` → When to extract puts the obligation on whoever writes the second copy. Two
+branches cut from the same base are **both first**: neither can see the other's copy, so the rule
+silently applies to nobody and both land.
+
+- Before opening a PR, diff against the sibling branches in flight for the same feature.
+- Where the same structure appears in two of them, the extraction belongs to **whichever merges
+  first**; the later branch rebases onto the shared home instead of re-landing its copy.
+- Copies that drift apart before anyone compares them stop being detectable as copies at all —
+  compare early, while they still look alike.
 
 ## Pull Requests
 
