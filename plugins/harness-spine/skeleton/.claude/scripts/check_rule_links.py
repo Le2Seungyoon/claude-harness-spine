@@ -24,11 +24,16 @@ narrow, because a checker that flags prose gets deleted:
   - Anything containing a glob, a placeholder, or an angle-bracket is a PATTERN, not a path.
   - A bare filename resolves against the places harness files live, so `settings.json` and
     `workflow.md` are found without every reference having to spell out a full path.
+  - A backticked path WRAPPED ACROSS A LINE BREAK is not matched at all (the regex is
+    newline-free), so it reads as a pointer and is checked by nothing. Judge a new pointer by the
+    `N references` count moving, never by the CLEAN verdict alone.
 Measured on the shipped skeleton: 0 findings. Re-measure before tightening any of the above.
 
-This file is project-agnostic; it ships verbatim in every project the harness scaffolds.
-Do not hand-edit it here — reconcile with the `harness-spine:update` skill so the copies do not
-drift. If this project deliberately diverges, say why in this docstring.
+This file ships in every project the harness scaffolds. Its LOGIC is project-agnostic, with one
+deliberate exception: the source roots in `SEARCH_DIRS` are filled per project. That line is
+expected to differ and is NOT drift — `harness-spine:update` reconciles around it, never onto it.
+Everything else: do not hand-edit here; reconcile with that skill so the copies do not drift. If
+this project diverges anywhere beyond the source roots, say why in this docstring.
 """
 import os
 import re
@@ -36,8 +41,16 @@ import sys
 
 GOVERNED = ("CLAUDE.md", ".claude/rules")
 EXTENSIONS = (".md", ".py", ".json", ".sh")
-# Where a bare filename is allowed to live.
-SEARCH_DIRS = ("", ".claude", ".claude/rules", ".claude/hooks", ".claude/scripts")
+# Where a bare filename is allowed to live: the harness dirs, plus this project's SOURCE ROOTS.
+# FILL the source roots. Rules files name modules the way the code imports them
+# (`features/series.py`, `_common.py`), not by repo-relative path, so a project whose source is
+# not at the repo root resolves almost nothing without them. Measured on one such repo: 13 of 19
+# findings were real files under an unlisted `include/custflow`, a 95% false-positive rate — and
+# `enforcement.md` -> Before promoting a check to deny is exactly about that being fatal.
+SEARCH_DIRS = (
+    "", ".claude", ".claude/rules", ".claude/hooks", ".claude/scripts",
+    # FILL: e.g. "src", "lib", "include", "include/<pkg>", "dags" -- delete if source is at root.
+)
 # A token carrying any of these describes a shape, not a file.
 PATTERN_CHARS = ("*", "?", "{{", "<", ">", " ", "|")
 
