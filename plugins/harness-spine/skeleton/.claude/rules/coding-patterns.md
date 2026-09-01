@@ -53,6 +53,16 @@ correspondence test when the mapping is enumerable.
 - If extraction genuinely cannot happen in this change (scope, risk, a release in flight), **don't
   copy silently**: copy and say so in the PR — what was duplicated, why, and what would make
   extraction possible. A copy a reviewer can see is a decision; a silent one is a defect.
+- **Shadowing is a separate defect from copying, and counting cannot find it.** Re-declaring a
+  name a shared home already exports makes one name mean two things depending on which file you
+  are in — and the more the bodies have drifted, the worse it is. It is caught on the *name*,
+  not the body; both fixes are fine (import the canon, or rename the local one).
+
+**Reading a repetition count.** A count of two says *promote this*. A high count usually says
+something else: the thing repeating is a symptom, and what is missing is one level up — a shared
+handler, not a shared string. Promoting the fragment there just freezes the wrong shape. And
+keep the two layers apart: **no canonical home yet → an advisory ledger a human rules on; a
+canon exists and was copied anyway → a hard failure**, because that one needs no judgment.
 
 ## Derive, don't restate
 
@@ -65,6 +75,11 @@ Hardcoding is not only about scalars.
   N times means fixing it in N places — which is the definition. The only difference from a magic
   number is that nothing is counting the repeats for you.
 - Don't couple logic to specific value names/counts — behave off the config lists / thresholds.
+- **Where a value genuinely cannot be derived, gate the drift instead of banning the copy.** Some
+  boundaries have no import (a document export with no access to the stylesheet, a generated
+  artifact, a wire format). Banning the literal there is the wrong target — the literal is
+  unavoidable, the divergence is not. Have the constant **name its source**, and check it still
+  equals it (`enforcement.md` → Four layers).
 - Imports/ordering: stdlib → third-party → local, blank-line separated. Type hints on signatures.
   <!-- FILL: adjust to this project's language / style conventions. -->
 
