@@ -46,8 +46,10 @@ is already Diverged, and a reformatted-but-untouched file is still Pristine.
 - Never re-insert a `<!-- FILL -->` marker into a slot the project already filled.
 - `settings.json` is not text-mergeable. Compare **key by key** — hook matchers, `permissions`,
   `enabledPlugins` — and name each key-level change on its own.
-- Hook scripts: if the repo's copy differs, show the diff and ask. A project may have hardened or
-  narrowed its hook deliberately.
+- Hook and script files: if the repo's copy differs, show the diff and **ask which way it should
+  go** — a project may have hardened its copy deliberately, or may simply have drifted. Never
+  assume either. Where a project keeps a deliberate divergence, have it say so in that file's
+  docstring, so the next reconcile reads intent instead of guessing.
 - Ask per proposal: **apply / skip / defer**, and record the reason for every skip.
 
 ### 4. Budget check — the update itself can blow the budget
@@ -57,8 +59,11 @@ is already Diverged, and a reformatted-but-untouched file is still Pristine.
 
 ### 5. Verify
 - `python3 -c "import json; json.load(open('.claude/settings.json'))"` — valid JSON.
-- Run the tests beside every hook (`test_*.py`); for any hook this update touched, re-run it against
-  both a must-block and a must-pass sample. A hook that only ever blocks is a false-positive factory.
+- Run the tests beside every hook and script (`test_*.py`); for any one this update touched, re-run
+  it against both a must-block and a must-pass sample. A check that only ever fires is a
+  false-positive factory.
+- `python3 .claude/scripts/check_rule_links.py` — `RULE_LINKS_CLEAN`. Relocating a section is the
+  most common thing this skill proposes, and it is exactly what orphans a pointer.
 - `grep -rn '{{' CLAUDE.md .claude/` — no raw `{{VAR}}` may ship.
 
 ### 6. Report
@@ -66,6 +71,10 @@ is already Diverged, and a reformatted-but-untouched file is still Pristine.
 - **"Nothing to apply" is not proof the harness is current.** Section matching fails by design on a
   file the project rewrote in its own words: the change can be real and simply unmatched. Say that
   in the report instead of issuing a clean bill of health.
+- **Divergence is the defect, and only a check that sees both sides finds it.** A shipped file
+  edited in one repo and not another leaves both looking internally consistent while the same
+  nudge tells two teams different things. List every file whose copy differs from the skeleton,
+  even the ones left alone on purpose — an unlisted divergence is one nobody re-decides.
 - Any check this update introduced stays advisory until someone **measures its false-positive rate
   against this repo's existing tree**. Do not promote it to `permissions.deny` on the same day.
 

@@ -71,6 +71,8 @@ over it — surface it to the user (see `workflow.md` → Rule Conflicts & Harne
 `.claude/settings.json` wires: a PR-gate hook (blocks push/PR when `{{DEFAULT_BRANCH}}` isn't
 merged in), a commit-attribution deny hook, and a PostToolUse hook nudging on oversized
 instruction files. See `git-workflow.md` and `workflow.md` → File size budget for the rationale.
+Generators and repo-wide scanners live in `.claude/scripts/`, not `.claude/hooks/` — both ship
+with their tests (`enforcement.md` → Where harness code lives).
 
 **Hooks only see this session's edits** — code written in an IDE, by a teammate, or by another
 agent passes none of them, and a silent hook is not proof a check ran. Rules that must hold on
