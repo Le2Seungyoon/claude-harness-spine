@@ -17,7 +17,20 @@ Don't skip this even for "small" changes or doc edits.
 
 ## Branch Naming
 
-- New feature: `feature/<name>` · bug fix: `fix/<name>`
+- New feature: `feature/<name>` · bug fix: `fix/<name>` · behavior-preserving rework:
+  `refactor/<name>`
+
+**The prefix tells the reviewer what to look for**, not which box the work belongs in.
+`feature/` — new surface, so review the contract. `fix/` — something was wrong, so review
+whether it is now right. `refactor/` — a claim that behavior does not change, so the review
+hunts for the change you did not intend. The bar is deliberately loose: **`fix/` may contain
+refactoring, and you never split a PR to satisfy a prefix.** Reach for `refactor/` only when
+behavior-preserving is the *point* of the change.
+
+<!-- FILL: if this project has a standing staging branch (one that is never closed out and is
+deployed somewhere), name it here and state who merges the default branch into it. Two things
+break together when that lapses: the deployment runs exactly that much stale code, and every
+branch cut from it inherits the lag — which the PR gate below then refuses at push time. -->
 
 ## Protected Commands
 
