@@ -35,6 +35,10 @@ IMPORTANT: Don't hardcode tunable values; put them in config.
 - **User-facing docs** — `docs/`, written in the team's language, filename `YYYY-MM-DD-<name>.md`
   (the date prefix keeps the project timeline scannable).
   <!-- FILL: set the language / location / naming for this team, or delete if N/A. -->
+- **The date prefix encodes how the file is maintained.** Dated = a snapshot of one moment, never
+  rewritten. **Undated = a living document, overwritten in place** — and inside one, the three
+  parts age differently: current state is *overwritten*, traps and prerequisites *accumulate*, and
+  decisions belong in whatever ledger records decisions, not here.
 - **Claude-facing instruction files** (this file, `.claude/**/*.md`) — written in **English**.
   Domain string literals (menu labels, error constants, column names) stay in their original
   language — they are data, not prose.
