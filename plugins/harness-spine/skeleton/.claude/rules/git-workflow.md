@@ -78,6 +78,12 @@ always an intent decision, not a textual one.
    not mean your code uses it. Ask what got promoted since you branched, and read shared homes from
    `origin/{{DEFAULT_BRANCH}}` — never from your own working tree.
 
+## Self-review before you push (required)
+
+Run `self-review.md` — ① the project's gates, on the merged state above, and ② the judgments
+no gate can make. Both halves go in the PR description. Red in ① is not a review comment; fix
+it before pushing.
+
 ## Parallel branches have no "second arrival"
 
 `coding-patterns.md` → When to extract puts the obligation on whoever writes the second copy. Two

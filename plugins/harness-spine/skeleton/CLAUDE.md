@@ -54,6 +54,7 @@ Read the relevant rule in `.claude/rules/` before writing code:
 | `coding-patterns.md` | when touching source (`{{SOURCE_GLOB}}`) |
 | `architecture.md` | when working on new modules / layer boundaries |
 | `testing.md` | when writing/editing tests |
+| `self-review.md` | at the end of every task, before declaring done or pushing |
 | `enforcement.md` | before adding a rule, a hook, or a deny — it decides which layer it goes in |
 <!-- FILL: add rows for topic/tool rules files you create (e.g. a service integration). Mark any
 generated file as `<name> (generated — regenerate with <cmd>)`; never hand-edit one. -->
