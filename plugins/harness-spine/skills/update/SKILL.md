@@ -51,6 +51,11 @@ is already Diverged, and a reformatted-but-untouched file is still Pristine.
   go** — a project may have hardened its copy deliberately, or may simply have drifted. Never
   assume either. Where a project keeps a deliberate divergence, have it say so in that file's
   docstring, so the next reconcile reads intent instead of guessing.
+- **Check every `paths:` gate against where its rule is actually executed.** A rules file gated
+  to the directory its subject is *stored* in goes unread by the sessions that *run* it — one repo
+  gated its warehouse rules to `dbt/**` while half that contract executed in a Python loader, so
+  the loader's own rules never loaded. This is a defect a heading diff cannot see; read the gate,
+  not just the body.
 - Ask per proposal: **apply / skip / defer**, and record the reason for every skip.
 
 ### 4. Budget check — the update itself can blow the budget
