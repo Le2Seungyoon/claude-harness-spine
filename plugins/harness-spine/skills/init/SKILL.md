@@ -91,10 +91,14 @@ content — copy from `skeleton/` and substitute.**
   `<!-- FILL -->` marker instead of leaving a bare `{{VAR}}`.
 
 ### 6. Report
-- List every remaining `<!-- FILL: ... -->` marker (file + line) as a checklist for the human —
-  especially the ② stub rules (`coding-patterns.md`, `architecture.md`, `testing.md`) whose deep
-  project rules only the human / a later session can write, and `self-review.md` ① — an unfilled
-  gates table leaves half that checklist inert.
+- List every remaining FILL marker (file + line) as a checklist for the human. **Grep both forms**
+  — `grep -rn -e '<!-- FILL' -e '# FILL' CLAUDE.md .claude/` — because markers in a `.py` file
+  carry the comment form and a `<!-- FILL -->`-only grep silently misses them.
+- Especially: the ② stub rules (`coding-patterns.md`, `architecture.md`, `testing.md`) whose deep
+  project rules only the human / a later session can write; `self-review.md` ① — an unfilled
+  gates table leaves half that checklist inert; and `check_rule_links.py` -> `SEARCH_DIRS` — if
+  this project's source is not at the repo root, an unfilled slot makes that checker report real
+  files as broken pointers, which is how a check gets deleted rather than fixed.
 - Remind: add topic/tool rules files (a service integration, a framework) as the project grows;
   keep each under the ~150-line budget (the `check_rules_size.py` hook nudges when crossed).
 - **State plainly what was not installed: there is no counting layer.** The harness ships the

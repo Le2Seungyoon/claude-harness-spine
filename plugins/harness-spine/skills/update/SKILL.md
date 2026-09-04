@@ -43,7 +43,8 @@ is already Diverged, and a reformatted-but-untouched file is still Pristine.
 - For **Diverged** files, match on heading text and propose only the skeleton sections with no
   counterpart. Where both sides have the section and disagree, **report the conflict; do not
   resolve it silently** — the project's wording usually encodes a decision this skill can't see.
-- Never re-insert a `<!-- FILL -->` marker into a slot the project already filled.
+- Never re-insert a FILL marker into a slot the project already filled — in **either** form:
+  `<!-- FILL -->` in instruction files, `# FILL` in hooks and scripts.
 - `settings.json` is not text-mergeable. Compare **key by key** — hook matchers, `permissions`,
   `enabledPlugins` — and name each key-level change on its own.
 - Hook and script files: if the repo's copy differs, show the diff and **ask which way it should
